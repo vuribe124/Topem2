@@ -1,0 +1,47 @@
+<div class="text-center">
+  <h1 id="title" class="title">
+    <img src="assets/image/logo-s.png" alt="" height="120">
+  </h1>
+
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+    <div class="form-control-group my-4 text-left">
+      <label class="label" for="input-email">Correo:</label>
+      <input type="email" nbInput [status]="statusSubmit ? email?.invalid ? 'danger' : 'success' : 'primary'"
+        fullWidth id="input-email" placeholder="example@mail.com" formControlName="email">
+      <ng-container *ngIf="statusSubmit && (email?.invalid && email?.touched)">
+        <p class="caption status-danger" *ngIf="email?.errors?.required">
+          El correo es requerido!
+        </p>
+        <p class="caption status-danger" *ngIf="email?.errors?.pattern">
+         El correo es invalido
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="form-control-group my-4 text-left">
+      <span class="label-with-link row">
+        <label class="label col-4 m-0 text-left pb-2" type="password" for="input-password">Contraseña:</label>
+        <a class="forgot-password caption-2 offset-4" routerLink="../request-password">Has olvidado tu contraseña?</a>
+      </span>
+      <input type="password" nbInput [status]="statusSubmit ? password?.invalid ? 'danger' : 'success' : 'primary'"
+        fullWidth id="input-password" placeholder="contraseña" formControlName="password">
+      <ng-container *ngIf="statusSubmit && (password?.invalid && password?.touched)">
+        <p class="caption status-danger" *ngIf="password?.errors?.required">
+          La contraseña es requerida!
+        </p>
+        <p class="caption status-danger" *ngIf="password?.errors?.minlength || password?.errors?.maxlength">
+          Contraseña invalida
+        </p>
+      </ng-container>
+    </div>
+
+    <button nbButton fullWidth
+    style="background-color:  #fcd806; border-color: #fcd806; color: white;"
+     status="danger" size="large" [disabled]="statusSubmit || !loginForm.valid" class="my-4">
+      Iniciar sesión
+    </button>
+    <p class="mb-5 pb-lg-2" style="color: #393f81;">No tienes una cuenta? <a routerLink="../register"
+      style="color: #fcd806;">Registrate aqui</a></p>
+  </form>
+</div>

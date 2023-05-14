@@ -1,0 +1,11 @@
+.fit-image {
+  width: 100%;
+  object-fit: cover;
+  height: 130px; /* only if you want fixed height */
+}
+
+.centerCatptcha {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}

@@ -1,0 +1,54 @@
+<!-- <div class="row justify-content-center"> -->
+  <div class="text-center">
+    <h1 id="title" class="title">Registrarse</h1>
+
+    <form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title">
+
+      <div class="form-control-group my-4 text-left">
+        <label class="label" for="input-email">Correo:</label>
+        <input nbInput
+               fullWidth
+               [(ngModel)]="user.email"
+               #email="ngModel"
+               name="email"
+               id="input-email"
+               pattern=".+@.+\..+"
+               placeholder="example@mail.com"
+               fieldSize="large"
+               autofocus
+               [status]="email.dirty ? (email.invalid  ? 'danger' : 'success') : 'primary'"
+               [required]="getConfigValue('forms.validation.email.required')"
+               [attr.aria-invalid]="email.invalid && email.touched ? true : null">
+        <ng-container *ngIf="email.invalid && email.touched">
+          <p class="caption status-danger" *ngIf="email.errors?.required">
+            El correo es requerido!
+          </p>
+          <p class="caption status-danger" *ngIf="email.errors?.pattern">
+            El correo es invalido
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="form-control-group accept-group" *ngIf="getConfigValue('forms.register.terms')">
+        <nb-checkbox name="terms" [(ngModel)]="user.terms" [required]="getConfigValue('forms.register.terms')">
+          Agree to <a href="#" target="_blank"><strong>Terms & Conditions</strong></a>
+        </nb-checkbox>
+      </div>
+
+      <button nbButton
+              fullWidth
+              style="background-color:  #fcd806; border-color: #fcd806;"
+              status="danger"
+              size="large"
+              [disabled]="submitted || !form.valid"
+              [class.btn-pulse]="submitted"
+              class="my-4">
+        Iniciar sesión
+      </button>
+    </form>
+
+    <section class="another-action" aria-label="Sign in">
+      ¿Ya tienes una cuenta?<a class="text-link" style="color: #fcd806;" routerLink="../login">Iniciar sesión</a>
+    </section>
+  </div>
+<!-- </div> -->

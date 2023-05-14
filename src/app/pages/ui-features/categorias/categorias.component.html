@@ -1,0 +1,30 @@
+<div class="row justify-content-center">
+  <div class="col-md-12">
+    <h2 class="text-center">Tabla de Categorías</h2>
+    <nb-card>
+      <nb-card-body>
+        <button nbButton status="primary" (click)="onAdd()">
+          <i class="nb-plus"></i> Agregar Categoría
+        </button>
+        <ng2-smart-table [settings]="settings" [source]="source" (custom)="onCustomAction($event)">
+        </ng2-smart-table>
+        <div id="categoryForm" style="display: none">
+          <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="name">Nombre</label>
+              <input type="text" class="form-control" id="name" formControlName="name" required>
+            </div>
+            <div class="form-group">
+              <label for="description">Descripción</label>
+              <input type="text" class="form-control" id="description" formControlName="description" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-danger" (click)="hideAddCategoryModal()">Cancelar</button>
+          </form>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+
