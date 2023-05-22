@@ -3,23 +3,27 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { NbToastrService } from '@nebular/theme';
 import { FormService } from '../../../services/form.service';
 import { SettingService } from '../../../services/setting.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { iForm } from '../../../models/form.model';
 
 @Component({
-  selector: 'ngx-evaluaciones',
-  templateUrl: './evaluaciones.component.html',
-  styleUrls: ['./evaluaciones.component.scss']
+  selector: 'ngx-evaluaciones-edit',
+  templateUrl: './evaluaciones-edit.component.html',
+  styleUrls: ['./evaluaciones-edit.component.scss']
 })
-export class EvaluacionesComponent {
+export class EvaluacionesEditComponent implements OnInit {
+
   myForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private formSV: FormService,
-    protected router: Router,
     public sttSV: SettingService,
+    private routers: ActivatedRoute,
+    protected router: Router,
   ) {
     this.myForm = this.fb.group({
+      id: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       responsible_id: new FormControl(1, [Validators.required]),
@@ -48,6 +52,17 @@ export class EvaluacionesComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.formSV.get({
+      id: this.routers.snapshot.params.id
+    }).subscribe((response: any) => {
+      console.log('response', response)
+      if (response.success) {
+        this.setFormData(response.data)
+      }
+    })
+  }
+
   addQuestion() {
     this.questions.push(
       new FormGroup({
@@ -69,6 +84,43 @@ export class EvaluacionesComponent {
     )
   }
 
+  setFormData(form_data: iForm) {
+    this.id.setValue(form_data.id)
+    this.name.setValue(form_data.name)
+    this.description.setValue(form_data.description)
+    this.responsible_id.setValue(form_data.responsible_id)
+    this.rating_type_id.setValue(form_data.rating_type_id)
+    this.value_type.setValue(form_data.value_type)
+    this.assigned_id.setValue(form_data.assigned_id)
+    this.note.setValue(form_data.note)
+
+    form_data.questions.forEach((question: any) => {
+      this.questions.push(
+        new FormGroup({
+          id: new FormControl(question.id),
+          question: new FormControl(question.question),
+          number: new FormControl(this.questions.length),
+          required: new FormControl(false),
+          value_question: new FormControl(),
+          description_question: new FormControl(),
+          type: new FormControl(),
+          default: new FormControl(''),
+          category_id: new FormControl(),
+          options: new FormArray(
+            this.getOptions(question.options)
+          ),
+        })
+      )
+    });
+  }
+
+  getOptions(options: any) {
+    return options.map((option: any) => new FormGroup({
+      value: new FormControl(option.value),
+      option: new FormControl(option.option)
+    }))
+  }
+
   addOption(index: number) {
     this.options(index).push(
       new FormGroup({
@@ -78,13 +130,8 @@ export class EvaluacionesComponent {
     )
   }
 
-  removeOption(questionId: number, optionIndex: number) {
-    const optionsArray = this.myForm.get(`options${questionId}`) as FormArray;
-    optionsArray.removeAt(optionIndex);
-    const optionsArrayValue = this.myForm.get(`optionsValue${questionId}`) as FormArray;
-    optionsArrayValue.removeAt(optionIndex);
-    const optionsArrayText = this.myForm.get(`optionsText${questionId}`) as FormArray;
-    optionsArrayText.removeAt(optionIndex);
+  removeElementFormArray(arrForm: FormArray, index: number) {
+    arrForm.removeAt(index)
   }
 
   onSubmit() {
@@ -92,13 +139,13 @@ export class EvaluacionesComponent {
       console.log('response', response);
       if (response.success) {
         this.sttSV.alert('Correcto', response.message, 'success')
-        this.router.navigate([`pages/forms/list-evaluaciones`]);
       } else {
         this.sttSV.alert('Error', response.message, 'error')
       }
     });
   }
 
+  get id() { return this.myForm.get('id') }
   get name() { return this.myForm.get('name') }
   get description() { return this.myForm.get('description') }
   get responsible_id() { return this.myForm.get('responsible_id') }
@@ -108,4 +155,5 @@ export class EvaluacionesComponent {
   get note() { return this.myForm.get('note') }
   get questions() { return this.myForm.get('questions') as FormArray }
   options(index: number) { return this.questions.controls[index].get('options') as FormArray }
+
 }

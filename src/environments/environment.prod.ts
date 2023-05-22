@@ -7,4 +7,4 @@ export const environment = {
   production: true,
 };
 
-export const baseAPIUrl: string = 'topen.herokuapp.com';
+export const baseAPIUrl: string = 'http://topem.test/api';

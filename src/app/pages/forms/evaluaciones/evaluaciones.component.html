@@ -9,51 +9,58 @@
     <nb-card-body>
       <div class="form-container">
         <div class="form-group">
-          <label for="title">Nombre del formulario:</label>
-          <input id="title" type="text" formControlName="title" nbInput fullWidth fieldSize="large" placeholder="Nombre del formulario">
+          <label for="name">Nombre del formulario:</label>
+          <input id="name" type="text" formControlName="name" nbInput fullWidth fieldSize="large"
+            placeholder="Nombre del formulario">
         </div>
         <div class="form-group">
           <label for="description">Descripción del formulario:</label>
-          <textarea id="description" formControlName="description" rows="5" nbInput fullWidth shape="round" placeholder="Descripción"></textarea>
+          <textarea id="description" formControlName="description" rows="5" nbInput fullWidth shape="round"
+            placeholder="Descripción"></textarea>
         </div>
         <div class="form-group row align-items-center" *ngFor="let question of questions">
           <div class="col-12 mb-2">
-          <button nbButton size="small" (click)="removeQuestion()">
-            <nb-icon icon="trash-2-outline"></nb-icon>Eliminar
-          </button>
-        </div>
-          <div class="col-6 mb-2">
-            <input nbInput fullWidth id="question{{question.id}}" type="text" formControlName="question{{question.id}}" placeholder="Escribe aquí tu pregunta">
+            <button nbButton size="small" (click)="removeQuestion()">
+              <nb-icon icon="trash-2-outline"></nb-icon>Eliminar
+            </button>
           </div>
           <div class="col-6 mb-2">
-            <nb-select id="answerType{{question.id}}" formControlName="answerType{{question.id}}" fullWidth placeholder="Selecciona el tipo de respuesta">
+            <input nbInput fullWidth id="question{{question.id}}" type="text" formControlName="question{{question.id}}"
+              placeholder="Escribe aquí tu pregunta">
+          </div>
+          <div class="col-6 mb-2">
+            <nb-select id="answerType{{question.id}}" formControlName="answerType{{question.id}}" fullWidth
+              placeholder="Selecciona el tipo de respuesta">
               <nb-option value="short">Respuesta breve</nb-option>
               <nb-option value="paragraph">Párrafo</nb-option>
               <nb-option value="multiple">Opción múltiple</nb-option>
             </nb-select>
           </div>
           <div class="col-6 mb-2">
-            <input nbInput fullWidth id="question{{question.value}}" type="text" formControlName="value{{question.id}}" placeholder="Escribe el valor">
+            <input nbInput fullWidth id="question{{question.value}}" type="text" formControlName="value{{question.id}}"
+              placeholder="Escribe el valor">
           </div>
           <div class="col-6 mb-2">
-            <nb-select id="category{{question.id}}" formControlName="category{{question.id}}" fullWidth placeholder="Selecciona la categoria">
+            <nb-select id="category{{question.id}}" formControlName="category{{question.id}}" fullWidth
+              placeholder="Selecciona la categoria">
               <nb-option value="1">Categoria 1</nb-option>
               <nb-option value="2">Categoria 2</nb-option>
             </nb-select>
           </div>
           <div *ngIf="myForm.get('answerType' + question.id)?.value === 'short'" class="col-12 mb-2">
-            <input nbInput fullWidth id="question{{question.id}}" type="text" formControlName="question{{question.id}}" placeholder="Escribe aquí tu pregunta">
+            <input nbInput fullWidth id="question{{question.id}}" type="text" formControlName="question{{question.id}}"
+              placeholder="Escribe aquí tu pregunta">
           </div>
           <div *ngIf="myForm.get('answerType' + question.id)?.value === 'paragraph'" class="col-12 mb-2">
-            <textarea nbInput fullWidth id="question{{question.id}}" formControlName="question{{question.id}}" rows="5" placeholder="Escribe aquí tu pregunta"></textarea>
+            <textarea nbInput fullWidth id="question{{question.id}}" formControlName="question{{question.id}}" rows="5"
+              placeholder="Escribe aquí tu pregunta"></textarea>
           </div>
           <div *ngIf="myForm.get('answerType' + question.id)?.value === 'multiple'" class="col-12 mb-2">
             <div *ngFor="let option of myForm.get('options' + question.id)?.controls; let i = index;">
               <div class="row">
                 <div class="col-6">
                   <nb-radio-group formControlName="{{i}}">
-                    <nb-radio
-                      value="option 1">
+                    <nb-radio value="option 1">
                       <nb-form-field>
                         <input nbInput fullWidth placeholder="Opción {{i+1}}" formControlName="{{'optionsValue'+i}}">
                         <button nbSuffix nbButton ghost (click)="removeOption(question.id, i)">

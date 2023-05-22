@@ -1,0 +1,97 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+  <nb-card>
+    <nb-card-header>
+      <div class="title-container">
+        Editar formulario
+        <nb-icon nbPrefix icon="file-text-outline"></nb-icon>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="form-container">
+        <div class="form-group">
+          <label for="name">Nombre del formulario:</label>
+          <input id="name" type="text" formControlName="name" nbInput fullWidth fieldSize="large"
+            placeholder="Nombre del formulario">
+        </div>
+        <div class="form-group">
+          <label for="description">Descripción del formulario:</label>
+          <textarea id="description" formControlName="description" rows="5" nbInput fullWidth shape="round"
+            placeholder="Descripción"></textarea>
+        </div>
+        <div formArrayName="questions">
+          <div class="row" *ngFor="let _ of questions.controls; index as i">
+            <div class="col-12 mb-2" [formGroupName]="i">
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <button nbButton size="small" (click)="removeElementFormArray(questions,i)">
+                    <nb-icon icon="trash-2-outline"></nb-icon>Eliminar
+                  </button>
+                </div>
+                <div class="col-4 mb-2">
+                  <input nbInput fullWidth id="question{{i}}" type="text" formControlName="question"
+                    placeholder="Escribe aquí tu pregunta">
+                </div>
+                <div class="col-4 mb-2">
+                  <nb-select id="type{{i}}" formControlName="type" fullWidth
+                    placeholder="Selecciona el tipo de respuesta">
+                    <nb-option [value]="1">Respuesta breve</nb-option>
+                    <nb-option [value]="2">Párrafo</nb-option>
+                    <nb-option [value]="3">Opción múltiple</nb-option>
+                  </nb-select>
+                </div>
+                <div class="col-4 mb-2">
+                  <nb-select id="category{{i}}" formControlName="category_id" fullWidth
+                    placeholder="Selecciona la categoria">
+                    <nb-option value="1">Categoria 1</nb-option>
+                    <nb-option value="2">Categoria 2</nb-option>
+                  </nb-select>
+                </div>
+                <div class="col-12 mb-2">
+                  <input nbInput fullWidth id="description_question{{i}}" type="text"
+                    formControlName="description_question" placeholder="Descripción de la pregunta">
+                </div>
+                <div class="col-12 mb-2" *ngIf="questions.value[i].type == 1">
+                  <input nbInput fullWidth id="respuesta_breve{{i}}" type="text" formControlName="default"
+                    placeholder="Escribe el valor por defecto">
+                </div>
+                <div *ngIf="questions.value[i].type === 2" class="col-12 mb-2">
+                  <textarea nbInput fullWidth id="parrafo{{i}}" formControlName="default" rows="5"
+                    placeholder="Escribe el valor por defecto"></textarea>
+                </div>
+                <div *ngIf="questions.value[i].type === 3" class="col-12 mb-2" formArrayName="options">
+                  <div *ngFor="let _ of options(i).controls; index as j">
+                    <div class="row" [formGroupName]="j">
+                      <div class="col-6">
+                        <nb-radio-group [name]="'option'+i">
+                          <nb-radio [value]="1">
+                            <input nbInput fullWidth placeholder="Opción {{j+1}}" formControlName="option">
+                          </nb-radio>
+                        </nb-radio-group>
+                      </div>
+                      <div class="col-6">
+                        <nb-form-field>
+                          <input nbInput fullWidth placeholder="Valor {{j+1}}" formControlName="value">
+                          <button nbSuffix nbButton type="button" ghost (click)="removeElementFormArray(options(i), j)">
+                            <nb-icon icon="trash-2-outline">
+                            </nb-icon>
+                          </button>
+                        </nb-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <button nbButton type="button" size="small" (click)="addOption(i)">Agregar opción</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="button-container">
+          <button nbButton type="button" size="small" (click)="addQuestion()">Agregar pregunta</button>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton>Guardar</button>
+    </nb-card-footer>
+  </nb-card>
+</form>

@@ -12,4 +12,4 @@ export const environment = {
   production: false,
 };
 
-export const baseAPIUrl: string = 'http://192.168.1.31:8080/';
+export const baseAPIUrl: string = 'http://topem.test/api';
